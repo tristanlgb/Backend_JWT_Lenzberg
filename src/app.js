@@ -7,6 +7,8 @@ import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import viewRouter from './routes/views.router.js';
 import sessionRouter from './routes/sessions.router.js';
+import passport from 'passport';
+
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -35,8 +37,16 @@ app.engine('handlebars', exphbs); // Use exphbs without invoking it as a functio
 app.set('views', __dirname + '/views');
 app.set('view engine', 'handlebars');
 
+
+app.use(passport.initialize()); 
+app.use(passport.session()); 
 app.use('/', viewRouter);
 app.use('/api/session', sessionRouter);
+
+passport.use(userModel.createStrategy()); 
+passport.serializeUser(userModel.serializeUser()); 
+passport.deserializeUser(userModel.deserializeUser()); 
+
 
 const server = app.listen(PORT, () => {
     console.log('Servicio funcionando en el puerto: ' + PORT);
