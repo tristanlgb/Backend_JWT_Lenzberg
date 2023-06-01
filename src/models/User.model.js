@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
-
+import mongoose from 'mongoose';
+import bcrypt from 'bcrypt';
 
 // Connect to MongoDB
 mongoose.connect('mongodb+srv://tristanlgb:holass12@cluster0.ttwijc2.mongodb.net/eshop', {
@@ -55,6 +56,23 @@ const deleteUser = async (userId) => {
     console.log('User deleted:', deletedUser);
   } catch (error) {
     console.error('Error deleting user:', error);
+  }
+};
+const saltRounds = 10;
+
+const createUser = async () => {
+  try {
+    const password = await bcrypt.hash('password123', saltRounds); // Hash the password
+
+    const newUser = new userModel({
+      first_name: 'John',
+      last_name: 'Doe',
+      email: 'john.doe@example.com',
+      age: 25,
+      password: password, // Store the hashed password
+    });
+ } catch (error) {
+    console.error('Error creating user:', error);
   }
 };
 
